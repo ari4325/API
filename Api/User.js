@@ -36,14 +36,21 @@ router.post('/signup', async (req, res) => {
 //login users
 router.get('/login', async (req, res) => {
     try{
-        const query = { email_id:req.body.email_id, password:req.body.password}
+        /*const query = { email_id:req.body.email_id, password:req.body.password}
         User.findOne(query, (err, result) => {
             if (result != null){
                 res.status(200).send({"status":1 , "response": result })
             }else{
                 res.status(404).send({"status":0, "response": "User not found"})
             }
-        })
+        })*/
+        const user = await User.findOne({ email_id : req.body.email_id });
+        if (!user) return res.status(404).send({"status":0, "response": "Email Id could not be found"});
+
+        const validatePass = await bcryptjs.compare(req.body.password, user.password);
+        if (!validatePass) return res.status(404).send({"status":0, "response": "Password is wrong. Please Try Again"});
+
+        res.status(200).send({"status":1 , "response": user })
     }catch (err) {
         res.status(400).send({"status":0, "response": err})
     }
