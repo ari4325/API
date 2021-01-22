@@ -22,7 +22,7 @@ router.post('/signup', async (req, res) => {
         await User.findOne(query, (err, result) => {
             if (result == null){
                 const registeredUser = user.save()
-                res.status(200).json({"status":1, "response": user })
+                res.status(200).json({"status":1, "response": user._id })
             }else{
                 res.status(400).send({"status":0, "response": "User Already Exists"})
             }
