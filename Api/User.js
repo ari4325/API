@@ -2,18 +2,23 @@ const { query } = require('express')
 const express = require('express')
 const User = require('../Db/User')
 const router = express.Router()
+const bcryptjs = require('bcryptjs')
 
 
 //Sign up users
 router.post('/signup', async (req, res) => {
+    const salt = await bcryptjs.genSalt(10)
+    const hashPass = await bcryptjs.hash(req.body.password, salt)
+
     const user = new User({
         username: req.body.username,
         email_id: req.body.email_id,
-        password: req.body.password
+        password: hashPass,
+        mobile_no: req.body.mobile_no
     })
 
     try{
-        const query = { email_id: user.email_id }
+        const query = { email_id: user.email_id, mobile_no: user.mobile_no }
         await User.findOne(query, (err, result) => {
             if (result == null){
                 const registeredUser = user.save()
