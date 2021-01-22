@@ -9,6 +9,9 @@ connectDB()
 
 app.use(express.json( {extended:true} ));
 app.use('/api', user_route);
+app.get('/', (req, res) => {
+    res.send("Welcome to Scan And Pay")
+});
 
 
 app.listen(port, (err) => {
