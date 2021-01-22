@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const connectDB = require('./Db/Connection')
 const app = express()
-const port = process.env.Port || 4000;
+const port = process.env.Port || 8080;
 const user_route = require('./Api/User')
 
 connectDB()
