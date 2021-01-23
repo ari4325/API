@@ -22,3 +22,5 @@ router.post('/registerProduct', async (req, res) => {
         res.status(400).send({"status":0, "response": err})
     }
 })
+
+module.exports = router
