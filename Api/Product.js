@@ -17,9 +17,9 @@ router.post('/registerProduct', async (req, res) => {
         });
 
         await product.save();
-        res.send(200).json({"status":0, "response": product });
+        res.send(200).json({ "status" : 1, "response" : product });
     }catch (err){
-        res.status(400).send({"status":0, "response": err})
+        res.status(400).send({"status": 0 , "response": err})
     }
 })
 
