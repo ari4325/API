@@ -1,4 +1,3 @@
-const { query } = require('express')
 const express = require('express')
 const User = require('../Db/User')
 const router = express.Router()
