@@ -17,17 +17,16 @@ router.post('/registerProduct', async (req, res) => {
         });
 
         await product.save();
-        res.send(200).json({ "status" : 1, "response" : product });
+        return res.send(200).json({ "status" : 1, "response" : product });
     }catch (err){
-        res.status(400).send({"status": 0 , "response": err})
+        return res.status(400).send({"status": 0 , "response": err})
     }
 })
 
 router.get('/getProductById', async (req, res) => {
-    await Product.findOne( {code: req.body.code}, (err, result) => {
-        if (err) return res.send(400).send({ "status" : 0, "response" : "Product not found" });
-        return res.send(200).json({ "status" : 1, "response" : result });
-    });
+    const product = await Product.findOne({code: req.body.code});
+    if (product) return res.send(200).json({ "status" : 1, "response" : product });
+    else return res.send(400).send({ "status" : 0, "response" : "Product not found" });
 });
 
 module.exports = router
