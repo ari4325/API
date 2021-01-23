@@ -5,7 +5,7 @@ const router = express.Router()
 router.post('/registerProduct', async (req, res) => {
     try{
         const code = await Product.findOne({ code : req.body.code });
-        if (code) return res.status(400).send({ "status" : 0, "response" : "Product ALready Exists" });
+        if (code) return res.status(400).send({ "status" : 0, "response" : "Product Already Exists" });
 
         const product = new Product({
             name: req.body.name,
