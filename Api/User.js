@@ -4,46 +4,49 @@ const User = require('../Db/User')
 const router = express.Router()
 const bcryptjs = require('bcryptjs')
 
+var accountSid = 'ACc23133dfef9f371aa6a9422fa503ec1e'; // Your Account SID from www.twilio.com/console
+var authToken = 'c463e9e75223a293c6634bf9dcf5e4fb';
+
+var twilio = require('twilio');
+var client = new twilio(accountSid, authToken);
+
 
 //Sign up users
 router.post('/signup', async (req, res) => {
-    const salt = await bcryptjs.genSalt(10)
-    const hashPass = await bcryptjs.hash(req.body.password, salt)
-
-    const user = new User({
-        username: req.body.username,
-        email_id: req.body.email_id,
-        password: hashPass,
-        mobile_no: req.body.mobile_no
-    })
-
     try{
-        const query = { email_id: user.email_id, mobile_no: user.mobile_no }
-        await User.findOne(query, (err, result) => {
-            if (result == null){
-                const registeredUser = user.save()
-                res.status(200).json({"status":1, "response": user._id })
-            }else{
-                res.status(400).send({"status":0, "response": "User Already Exists"})
-            }
+        const email = await User.findOne({ email_id : req.body.email_id });
+        if (email) return res.status(400).send({"status":0, "response": "Email Id already taken!"});
+
+        const mobile = await User.findOne({ mobile_no : req.body.mobile_no });
+        if (mobile) return res.status(400).send({"status":0, "response": "Mobile No. already taken!"});
+
+        await client.messages.create({
+            body: 'This is your Scan And Pay verification code',
+            to: '+91'+req.body.mobile_no,  // Text this number
+            from: '+14845529097' // From a valid Twilio number
         })
-    }catch (err) {
-        console.log({message:err})
-        res.status(500).send({"status":0, "response": "There was some error. Check console for more info"});
+        .then((message) => console.log(message.sid));
+
+        const salt = await bcryptjs.genSalt(10)
+        const hashPass = await bcryptjs.hash(req.body.password, salt)
+
+        const user = new User({
+            username: req.body.username,
+            email_id: req.body.email_id,
+            password: hashPass,
+            mobile_no: req.body.mobile_no
+        })
+
+        await user.save();
+        res.status(200).json({"status":1, "response": user._id });
+    }catch(err){
+        res.status(400).send({"status":0, "response": err})
     }
 })
 
 //login users
 router.get('/login', async (req, res) => {
     try{
-        /*const query = { email_id:req.body.email_id, password:req.body.password}
-        User.findOne(query, (err, result) => {
-            if (result != null){
-                res.status(200).send({"status":1 , "response": result })
-            }else{
-                res.status(404).send({"status":0, "response": "User not found"})
-            }
-        })*/
         const user = await User.findOne({ email_id : req.body.email_id });
         if (!user) return res.status(404).send({"status":0, "response": "Email Id could not be found"});
 
