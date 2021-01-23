@@ -24,9 +24,10 @@ router.post('/registerProduct', async (req, res) => {
 })
 
 router.get('/getProductById', async (req, res) => {
-    const product = await Product.findOne( {code: req.body.code} );
-    if (product) res.send(200).json({ "status" : 1, "response" : product._id });
-    else res.send(400).send({ "status" : 0, "response" : "Product not found" });
+    await Product.findOne( {code: req.body.code}, (err, result) => {
+        if (err) return res.send(400).send({ "status" : 0, "response" : "Product not found" });
+        return res.send(200).json({ "status" : 1, "response" : result });
+    });
 });
 
 module.exports = router
