@@ -3,8 +3,8 @@ const Shop = require('../Db/Shop')
 const router = express.Router()
 
 router.post('addShop', async (req, res) => {
-    const shop = Shop.findOne({shop_name: req.body.shop_name})
-    if(shop) return res.status(400).send({ "status" : 0, "response" : "Shop has already been set up" });
+    const valid_shop = Shop.findOne({shop_name: req.body.shop_name})
+    if(valid_shop) return res.status(400).send({ "status" : 0, "response" : "Shop has already been set up" });
 
     const shop = new Shop({
         shop_name: req.body.shop_name,
