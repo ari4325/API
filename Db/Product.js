@@ -13,10 +13,6 @@ const product = new mongoose.Schema({
         type: String,
         required: true
     },
-    quantity:{
-        type: Number,
-        required: true
-    },
     cost:{
         type: String,
         required: true

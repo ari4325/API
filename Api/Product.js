@@ -11,7 +11,6 @@ router.post('/registerProduct', async (req, res) => {
             name: req.body.name,
             description: req.body.description,
             code: req.body.code,
-            quantity: req.body.quantity,
             cost: req.body.cost,
             image_url: req.body.image_url
         });
