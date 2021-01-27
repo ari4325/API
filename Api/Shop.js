@@ -29,6 +29,7 @@ router.post('/addProduct', async (req, res) => {
             { $push: {
                 products: shop_product
             }})
+            
     }catch (err){
         console.log(err)
     }
