@@ -19,13 +19,15 @@ router.post('/addProduct', async (req, res) => {
         const shop = Shop.findOne({shop_name: req.body.shop_name})
         if(!shop) return res.status(400).send({ "status" : 0, "response" : "Shop has not been set up" });
 
-        const product = Product.findOne({code:req.body.code})
-        if(!product) return res.status(400).send({ "status" : 0, "response" : "Product Does Not Exist" });
+        const shop_product = {
+            code: req.body.code,
+            quantity:req.body.quantity
+        }
 
         await Shop.findOneAndUpdate(
             {shop_name: req.body.shop_name}, 
             { $push: {
-                products: product
+                products: shop_product
             }})
     }catch (err){
         console.log(err)
