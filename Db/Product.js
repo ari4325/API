@@ -20,6 +20,10 @@ const product = new mongoose.Schema({
     image_url:{
         type: "String",
         required: true
+    },
+    quantity:{
+        type: Number,
+        required: true
     }
 });
 
