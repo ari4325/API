@@ -29,11 +29,4 @@ router.get('/getProductByCode', async (req, res) => {
     res.status(200).send({"status":1 , "response": pr })
 });
 
-router.get('/getProducts', async (req, res) => {
-    const pr = await Product.findOne({shop_name: req.body.shop_name});
-    if (!pr) return res.status(400).send({"status":0 , "response": "Shop not found !!!" })
-
-    res.status(200).send({"status":1 , "response": pr })
-})
-
 module.exports = router
