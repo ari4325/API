@@ -31,7 +31,7 @@ router.post('/addProduct', async (req, res) => {
         try{
             await Shop.findOneAndUpdate(
                 {shop_name: req.body.shop_name}, 
-                { $push: {
+                { $set: {
                     products: shop_product
                 }});
             
