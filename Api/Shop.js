@@ -19,6 +19,19 @@ router.post('/addProduct', async (req, res) => {
         const shop = Shop.findOne({shop_name: req.body.shop_name})
         if(!shop) return res.status(400).send({ "status" : 0, "response" : "Shop has not been set up" });
 
+        const pr = await Shop.findOne(
+            {
+                shop_name: req.body.shop_name,
+                products: { 
+                    $elemMatch: {
+                        code: req.body.code
+                    }
+                }
+            })
+
+        console.log(pr)
+        if(pr) return res.status(400).send({ "status" : 0, "response" : "Product Already Present" });
+
         const shop_product = new Product({
             name: req.body.name,
             description: req.body.description,
@@ -31,7 +44,7 @@ router.post('/addProduct', async (req, res) => {
         try{
             await Shop.findOneAndUpdate(
                 {shop_name: req.body.shop_name}, 
-                { $set: {
+                { $push: {
                     products: shop_product
                 }});
             

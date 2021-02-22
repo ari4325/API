@@ -46,4 +46,10 @@ router.get('/login', async (req, res) => {
     }
 })
 
+router.patch('/forgotPass', async (req, res) => {
+    await User.findOneAndUpdate({ email_id : req.body.email_id }, (result, err) => {
+        
+    })
+})
+
 module.exports = router
